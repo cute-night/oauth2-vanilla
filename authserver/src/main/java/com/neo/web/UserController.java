@@ -1,5 +1,6 @@
 package com.neo.web;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -49,6 +50,12 @@ public class UserController {
     	UserEntity user=userMapper.getOne(id);
         return user;
     }
+    @RequestMapping("/getCurrentUser")
+    public UserEntity getUser() {
+	    String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        UserEntity user = userMapper.getByUsername(username);
+        return user;
+    }
     @RequestMapping("/loginSuccess")
     @ResponseBody
     public String loginSuccess(Long id) {
@@ -90,13 +97,14 @@ public class UserController {
         SecurityContext securityContext = SecurityContextHolder.getContext();
         securityContext.setAuthentication((Authentication)null);
         /*securityContext.getAuthentication().setAuthenticated(false);*/
+        SecurityContextHolder.clearContext();
         httpServletRequest.removeAttribute(OAuth2AuthenticationDetails.ACCESS_TOKEN_VALUE);
 
         HttpSession session = httpServletRequest.getSession(false);
 
         if(session!=null){
+            System.out.println("session 不为空"+session.getId());
             session.invalidate();
-            System.out.println("session 不为空");
         }
         return "退出成功";
     }

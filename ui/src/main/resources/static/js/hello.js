@@ -19,7 +19,7 @@ var AppComponent = ng.core.Component({
 
         }
         this.logout = function() {
-            http.post('user/logout', {}).subscribe(function() {
+            http.post('logout', {}).subscribe(function() {
                 self.authenticated = false;
             });
         };

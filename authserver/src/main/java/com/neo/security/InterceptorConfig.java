@@ -43,6 +43,7 @@ public class InterceptorConfig  implements HandlerInterceptor {
         log.info("---------------------开始进入请求地址拦截----------------------------"+httpServletRequest.getRequestURL());
         SecurityContext securityContext = SecurityContextHolder.getContext();
         Authentication authentication = securityContext.getAuthentication();
+        String str = authentication.getName();
         System.out.println("是不是登录状态："+authentication.isAuthenticated());
         String token = (String) httpServletRequest.getAttribute(OAuth2AuthenticationDetails.ACCESS_TOKEN_VALUE);
         if(httpServletRequest.getSession()!=null){

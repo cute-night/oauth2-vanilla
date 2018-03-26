@@ -11,6 +11,7 @@ import org.springframework.security.oauth2.client.OAuth2ClientContext;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.security.oauth2.client.resource.OAuth2ProtectedResourceDetails;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.web.csrf.CsrfLogoutHandler;
 
 @SpringBootApplication
 @EnableZuulProxy
@@ -34,8 +35,8 @@ public class UiApplication extends WebSecurityConfigurerAdapter {
             .authorizeRequests()
                     .antMatchers("/index.html", "/app.html", "/").permitAll()
                     .anyRequest().authenticated()
-                /*.and()
-                    .logout().logoutUrl("/logout").deleteCookies("remove").invalidateHttpSession(true)*/
+                .and()
+                    .logout().logoutUrl("/logout").deleteCookies("remove").invalidateHttpSession(true)
                 .and()
                     .csrf()
                     .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
