@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.neo.mapper.UserMapper">
+    <resultMap id="BaseResultMap" type="com.neo.entity.UserEntity">
+        <id column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="username" property="username" jdbcType="VARCHAR"/>
+        <result column="password" property="password" jdbcType="VARCHAR"/>
+        <result column="user_sex" property="userSex" javaType="com.neo.enums.UserSexEnum"/>
+        <result column="nick_name" property="nickName" jdbcType="VARCHAR"/>
+        <collection  column="id" select="getRoles" property="roles" ofType="Role"></collection>
+        <collection  column="id" select="getResource" property="resources" ofType="Resource"></collection>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, username, password, user_sex, nick_name
+    </sql>
+
+    <select id="getAll" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM users
+    </select>
+
+    <select id="getOne" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM users
+        WHERE id = #{id}
+    </select>
+
+    <select id="getByUsername" parameterType="java.lang.String" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM users
+        WHERE username = #{username}
+    </select>
+
+    <insert id="insert" parameterType="com.neo.entity.UserEntity">
+       INSERT INTO 
+       		users
+       	VALUES
+       		(#{id},#{username}, #{password}, #{userSex},#{nickName})
+    </insert>
+
+    <update id="update" parameterType="com.neo.entity.UserEntity">
+        UPDATE
+        users
+        SET
+        <if test="username != null">username = #{username},</if>
+        <if test="password != null">password = #{password},</if>
+        nick_name = #{nickName}
+        WHERE
+        id = #{id}
+    </update>
+
+    <delete id="delete" parameterType="java.lang.Long">
+       DELETE FROM
+       		 users 
+       WHERE 
+       		 id =#{id}
+    </delete>
+
+    <resultMap id="getRoleMap" type="com.neo.entity.Role">
+        <id column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="role_name" property="roleName" jdbcType="VARCHAR"/>
+        <result column="discribe" property="discribe" jdbcType="VARCHAR"/>
+    </resultMap>
+    <select id="getRoles" resultMap="getRoleMap">
+        select
+        t2.role_id  , t3.role_name,t3.discribe
+        from users t1 LEFT JOIN user_role t2 ON  t1.id=t2.user_id left JOIN role t3   ON  t2.role_id=t3.id
+        WHERE   t1.id = #{userId}
+    </select>
+
+    <resultMap id="getResourceMap" type="com.neo.entity.Resource">
+        <id column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="url" property="url" jdbcType="VARCHAR"/>
+        <result column="type" property="type" jdbcType="VARCHAR"/>
+        <result column="level" property="level" jdbcType="INTEGER"/>
+        <result column="organization" property="organization" jdbcType="VARCHAR"/>
+        <result column="super_menu" property="superMenu" jdbcType="INTEGER"/>
+        <result column="discribe" property="discribe" jdbcType="VARCHAR"/>
+    </resultMap>
+    <select id="getResource" resultMap="getResourceMap">
+        select
+        t5.id, t5.url,t5.type,t5.level, t5.organization,t5.super_menu,t5.describe
+        from users t1
+        LEFT JOIN user_role t2 ON  t1.id=t2.user_id
+        LEFT JOIN role t3   ON  t2.role_id=t3.id
+        LEFT JOIN role_resource t4 ON t3.id = t4.role_id
+        LEFT JOIN resource t5 ON t4.resource_id = t5.id
+        WHERE
+          t1.id = #{userId}
+    </select>
+</mapper>
