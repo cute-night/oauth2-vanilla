@@ -1,8 +1,8 @@
-package com.neo.entity;/**
+package com.neo.entity;
+/**
  * Created by lcqwr on 2018/3/15.
  * describe
  */
-
 import java.io.Serializable;
 
 /**

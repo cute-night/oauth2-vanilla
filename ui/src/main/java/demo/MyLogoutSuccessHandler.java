@@ -25,21 +25,12 @@ public class MyLogoutSuccessHandler implements LogoutSuccessHandler {
         if (httpServletRequest.getSession() != null) {
             HttpSession session = httpServletRequest.getSession();
             Cookie[] cookies = httpServletRequest.getCookies();
-           /* *//*删除UI服务器的cookies*//*
-            for (int i = 0; i < cookies.length; i++) {
-                Cookie cookie = cookies[i];
-                cookie.setPath("/");
-                cookie.setMaxAge(0);
-*//*                cookie.setValue("ddddddddddddd");*//*
-                httpServletResponse.addCookie(cookie);
-            }*/
             /*删除UI端的cookies*/
-            Cookie cookie1 = new Cookie("JSESSIONID", "");
+            Cookie cookie1 = new Cookie("UISESSION", "");
             cookie1.setDomain("localhost");
             cookie1.setPath("/");
             cookie1.setMaxAge(0);
             httpServletResponse.addCookie(cookie1);
-            System.out.println("退出成功sessionId" + session.getId());
             /*删除server端的cookies*/
             Cookie cookie = new Cookie("JSESSIONID", "");
             cookie.setDomain("localhost");
@@ -47,6 +38,7 @@ public class MyLogoutSuccessHandler implements LogoutSuccessHandler {
             cookie.setMaxAge(0);
             httpServletResponse.addCookie(cookie);
             System.out.println("退出成功sessionId" + session.getId());
+            session.invalidate();
         }
     }
 }

@@ -10,11 +10,11 @@ import java.io.Serializable;
 public class Resource  implements Serializable {
     private String id;
     private String type;
-    private Integer level;
+    private Integer rank;
     private String organization;
     private Integer superMenu;
     private String url;
-    private String describe;
+    private String describ;
 
     public String getId() {
         return id;
@@ -30,14 +30,6 @@ public class Resource  implements Serializable {
 
     public void setType(String type) {
         this.type = type;
-    }
-
-    public Integer getLevel() {
-        return level;
-    }
-
-    public void setLevel(Integer level) {
-        this.level = level;
     }
 
     public String getOrganization() {
@@ -64,11 +56,19 @@ public class Resource  implements Serializable {
         this.url = url;
     }
 
-    public String getDescribe() {
-        return describe;
+    public Integer getRank() {
+        return rank;
     }
 
-    public void setDescribe(String describe) {
-        this.describe = describe;
+    public void setRank(Integer rank) {
+        this.rank = rank;
+    }
+
+    public String getDescrib() {
+        return describ;
+    }
+
+    public void setDescrib(String describ) {
+        this.describ = describ;
     }
 }

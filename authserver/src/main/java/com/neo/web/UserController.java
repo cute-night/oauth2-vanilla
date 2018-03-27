@@ -56,18 +56,6 @@ public class UserController {
         UserEntity user = userMapper.getByUsername(username);
         return user;
     }
-    @RequestMapping("/loginSuccess")
-    @ResponseBody
-    public String loginSuccess(Long id) {
-        UserEntity user=new UserEntity();
-        user.setId("userIdaaaaaaaaaaaaaaaaa");
-        user.setNickName("joker");
-        user.setPassword("123456");
-        user.setUsername("lichangqing");
-        user.setUserSex(UserSexEnum.MAN);
-        userMapper.insert(user);
-        return "添加成功";
-    }
     
     @RequestMapping("/add")
     public void save(UserEntity user) {

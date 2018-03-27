@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neo.mapper.ResourceMapper">
+  <resultMap id="BaseResultMap" type="com.neo.entity.Resource">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="url" jdbcType="VARCHAR" property="url" />
+    <result column="describ" jdbcType="VARCHAR" property="describ" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="rank" jdbcType="INTEGER" property="rank" />
+    <result column="super_menu" jdbcType="INTEGER" property="superMenu" />
+    <result column="organization" jdbcType="VARCHAR" property="organization" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, url, describ, type, rank, super_menu, organization
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from resource
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+
+  <select id="getAllResources" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from resource
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from resource
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.neo.entity.Resource">
+    insert into resource (id, url, describe, 
+      type, level, super_menu, 
+      organization)
+    values (#{id,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR}, #{describe,jdbcType=VARCHAR}, 
+      #{type,jdbcType=VARCHAR}, #{level,jdbcType=INTEGER}, #{superMenu,jdbcType=INTEGER}, 
+      #{organization,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.neo.entity.Resource">
+    insert into resource
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="url != null">
+        url,
+      </if>
+      <if test="describe != null">
+        describe,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="level != null">
+        level,
+      </if>
+      <if test="superMenu != null">
+        super_menu,
+      </if>
+      <if test="organization != null">
+        organization,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null">
+        #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="describe != null">
+        #{describe,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="level != null">
+        #{level,jdbcType=INTEGER},
+      </if>
+      <if test="superMenu != null">
+        #{superMenu,jdbcType=INTEGER},
+      </if>
+      <if test="organization != null">
+        #{organization,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.neo.entity.Resource">
+    update resource
+    <set>
+      <if test="url != null">
+        url = #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="describe != null">
+        describe = #{describe,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="level != null">
+        level = #{level,jdbcType=INTEGER},
+      </if>
+      <if test="superMenu != null">
+        super_menu = #{superMenu,jdbcType=INTEGER},
+      </if>
+      <if test="organization != null">
+        organization = #{organization,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.neo.entity.Resource">
+    update resource
+    set url = #{url,jdbcType=VARCHAR},
+      describe = #{describe,jdbcType=VARCHAR},
+      type = #{type,jdbcType=VARCHAR},
+      level = #{level,jdbcType=INTEGER},
+      super_menu = #{superMenu,jdbcType=INTEGER},
+      organization = #{organization,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

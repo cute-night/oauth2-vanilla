@@ -1,3 +1,7 @@
+server:
+  session:
+      cookie:
+        name: UISESSION
 spring:
   aop:
     proxy-target-class: true

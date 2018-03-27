@@ -60,6 +60,7 @@
        		 id =#{id}
     </delete>
 
+
     <resultMap id="getRoleMap" type="com.neo.entity.Role">
         <id column="id" property="id" jdbcType="VARCHAR"/>
         <result column="role_name" property="roleName" jdbcType="VARCHAR"/>
@@ -83,7 +84,7 @@
     </resultMap>
     <select id="getResource" resultMap="getResourceMap">
         select
-        t5.id, t5.url,t5.type,t5.level, t5.organization,t5.super_menu,t5.describe
+        t5.id, t5.url,t5.type,t5.rank, t5.organization,t5.super_menu,t5.describ
         from users t1
         LEFT JOIN user_role t2 ON  t1.id=t2.user_id
         LEFT JOIN role t3   ON  t2.role_id=t3.id
