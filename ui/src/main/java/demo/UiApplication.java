@@ -36,7 +36,7 @@ public class UiApplication extends WebSecurityConfigurerAdapter {
                     .antMatchers("/index.html", "/app.html", "/").permitAll()
                     .anyRequest().authenticated()
                 .and()
-                    .logout().logoutUrl("/logout").deleteCookies("remove").invalidateHttpSession(true)
+                    .logout().logoutUrl("/logout").logoutSuccessUrl("/").addLogoutHandler(new MylogoutHandler()).logoutSuccessHandler(new MyLogoutSuccessHandler()).deleteCookies("remove").invalidateHttpSession(false)
                 .and()
                     .csrf()
                     .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());

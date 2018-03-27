@@ -47,7 +47,7 @@ public class InterceptorConfig  implements HandlerInterceptor {
         System.out.println("是不是登录状态："+authentication.isAuthenticated());
         String token = (String) httpServletRequest.getAttribute(OAuth2AuthenticationDetails.ACCESS_TOKEN_VALUE);
         if(httpServletRequest.getSession()!=null){
-            System.out.println("session不为空");
+            System.out.println("session不为空"+httpServletRequest.getSession().getId());
         }
        log.info("-------------"+token);
 
