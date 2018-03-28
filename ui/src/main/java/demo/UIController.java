@@ -36,7 +36,7 @@ public class UIController {
     public String logoutSuccess (HttpServletRequest request, HttpServletResponse response) {
         HttpSession session = request.getSession();
 
-        Cookie cookie1 = new Cookie("JSESSIONID", "");
+        Cookie cookie1 = new Cookie("USESSIONID", "");
         cookie1.setDomain("localhost");
         cookie1.setPath("/");
         cookie1.setMaxAge(0);

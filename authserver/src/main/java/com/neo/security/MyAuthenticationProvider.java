@@ -31,15 +31,22 @@ public class MyAuthenticationProvider implements AuthenticationProvider {
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         String username = authentication.getName();
-        String password = (String) authentication.getCredentials();
+        String password = (String) authentication.getCredentials();     //密码或者验证码
         UserDetails user = userService.loadUserByUsername(username);
-        if(user == null){
-            throw new BadCredentialsException("Username not found.");
+
+        if(password.equals(username+"123")){
+            System.out.println("通过验证码认证");
+        }else{
+            if(user == null){
+                throw new BadCredentialsException("Username not found.");
+
+            }
+            //加密过程在这里体现
+            if (!password.equals(user.getPassword())) {
+                throw new BadCredentialsException("Wrong password.");
+            }
         }
-        //加密过程在这里体现
-        if (!password.equals(user.getPassword())) {
-            throw new BadCredentialsException("Wrong password.");
-        }
+
         Collection<? extends GrantedAuthority> authorities = user.getAuthorities();
 
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(user, password, authorities);

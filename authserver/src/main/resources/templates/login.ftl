@@ -9,7 +9,7 @@
 <body>
 <#if RequestParameters['error']??>
 	<div class="alert alert-danger">
-		There was a problem logging in. Please try again.
+		登录信息错误，请重试
 	</div>
 </#if>
 	<div class="container">

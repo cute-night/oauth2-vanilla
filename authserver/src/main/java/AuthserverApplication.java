@@ -30,14 +30,19 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Aut
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.KeyStoreKeyFactory;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.servlet.ViewResolver;
+import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.view.InternalResourceViewResolver;
+
 /**
 * Spring Security配置类。
  * @Author lichangqing
@@ -65,7 +70,6 @@ public class AuthserverApplication extends WebMvcConfigurerAdapter {
 		user.getName();
 		return user;
 	}
-
 	@Override
 	public void addViewControllers(ViewControllerRegistry registry) {
 		registry.addViewController("/login").setViewName("login");
@@ -87,8 +91,6 @@ public class AuthserverApplication extends WebMvcConfigurerAdapter {
 		registry.addInterceptor(new InterceptorConfig()).addPathPatterns("/**").excludePathPatterns("/login");
 	}
 
-
-
 	@Configuration
 	@Order(-20)
 	protected static class LoginConfig extends WebSecurityConfigurerAdapter {
@@ -100,24 +102,24 @@ public class AuthserverApplication extends WebMvcConfigurerAdapter {
 		@Resource
 		private MyAuthenticationProvider provider;
 		@Resource
-		private UserDetailsService userDetailsService;
+		private UserDetailsService userServiceImpl;
 
 		@Override
 		protected void configure(HttpSecurity http) throws Exception {
 			http
-				.formLogin().loginPage("/login").permitAll()
-			/*.and()
-				.logout().logoutUrl("/logout").deleteCookies("remove").invalidateHttpSession(true).logoutSuccessHandler(new MyLogoutHandler())*/
+				.formLogin().loginPage("/login")/*.failureUrl("/login?error=true")*//*.successForwardUrl("/loginSuccess")*//*.failureForwardUrl("/loginFail")*/.permitAll()
 			.and()
-				.requestMatchers().antMatchers("/oauth/authorize", "/login", "/oauth/confirm_access","/loginSuccess")
+				.requestMatchers().antMatchers("/oauth/authorize", "/login", "/oauth/confirm_access","/getFailMessage","/loginSuccess")
 			.and()
-				.authorizeRequests().anyRequest().authenticated();
+				.authorizeRequests().antMatchers("/getFailMessage").permitAll()
+									.anyRequest().authenticated();
 		}
 
 		@Override
 		protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 			auth.authenticationProvider(provider);
-			auth.userDetailsService(userDetailsService);
+			auth.userDetailsService(userServiceImpl);
+			userServiceImpl.loadUserByUsername("");
 		}
 	}
 

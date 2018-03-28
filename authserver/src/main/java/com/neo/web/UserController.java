@@ -14,7 +14,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
 import javax.servlet.http.HttpSession;
+
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
+import org.springframework.security.authentication.LockedException;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationDetails;
@@ -50,13 +55,49 @@ public class UserController {
     	UserEntity user=userMapper.getOne(id);
         return user;
     }
+    @RequestMapping("/loginSuccess")
+    public void loginSuccess() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        List<SimpleGrantedAuthority> auths=(List<SimpleGrantedAuthority>) auth.getAuthorities();
+        System.out.println("登录成功了，跳转到了这个/login方法。");
+    }
+    @RequestMapping("/loginFail")
+    public String loginFail() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        List<SimpleGrantedAuthority> auths=(List<SimpleGrantedAuthority>) auth.getAuthorities();
+        return "登录失败了，跳转到了这个/login方法。";
+    }
     @RequestMapping("/getCurrentUser")
     public UserEntity getUser() {
 	    String username = SecurityContextHolder.getContext().getAuthentication().getName();
         UserEntity user = userMapper.getByUsername(username);
         return user;
     }
-    
+
+    /**
+    * @Author lichangqing
+    * @Description 获取登录失败信息。
+    * @params
+    * @Date
+    */
+    @RequestMapping(value="/getFailMessage")
+    public String getFailMessage(HttpServletRequest request) {
+	    HttpSession session = request.getSession();
+        AuthenticationException exception = (AuthenticationException) session.getAttribute("SPRING_SECURITY_LAST_EXCEPTION");
+
+        if(exception==null){
+            return "";
+        }
+
+        if(exception  instanceof LockedException){
+            return "密码或验证码错误";
+        }else  if(exception  instanceof InternalAuthenticationServiceException){
+            return "用户名不存在";
+        }else {
+            return "未知错误，请重试";
+        }
+    }
+
     @RequestMapping("/add")
     public void save(UserEntity user) {
     	userMapper.insert(user);
