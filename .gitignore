@@ -1,6 +1,6 @@
 .idea/
 README.adoc
-pairs-oauth2-vanilla.iml
+*.iml
 target
 
 
