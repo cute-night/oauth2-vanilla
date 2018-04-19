@@ -32,6 +32,12 @@ public class UIController {
     public String getMessage (HttpServletRequest request, HttpServletResponse response) {
         return "获取信息";
     }
+    /**
+    * @Author lichangqing
+    * @Description 调用POST的logout方式是使用security自带的推出方法，调用这个也是可以。
+    * @params
+    * @Date
+    */
     @GetMapping(value="/logout")
     public String logoutSuccess (HttpServletRequest request, HttpServletResponse response) {
         HttpSession session = request.getSession();

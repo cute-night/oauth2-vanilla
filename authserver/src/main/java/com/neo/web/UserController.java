@@ -88,7 +88,6 @@ public class UserController {
         if(exception==null){
             return "";
         }
-
         if(exception  instanceof LockedException){
             return "密码或验证码错误";
         }else  if(exception  instanceof InternalAuthenticationServiceException){
